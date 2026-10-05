@@ -1,0 +1,98 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="ER Diagram" id="energy-service-er">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- BuildingZone -->
+        <mxCell id="zone" value="BuildingZone" style="swimlane;rounded=0;whiteSpace=wrap;html=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="220" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="zone-id" value="PK  id: BIGINT" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="zone">
+          <mxGeometry y="30" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zone-name" value="     name: VARCHAR(100) UNIQUE" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="zone">
+          <mxGeometry y="60" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zone-desc" value="     description: VARCHAR(255)" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="zone">
+          <mxGeometry y="90" width="220" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Meter -->
+        <mxCell id="meter" value="Meter" style="swimlane;rounded=0;whiteSpace=wrap;html=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="380" y="60" width="240" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="meter-id" value="PK  id: BIGINT" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="meter">
+          <mxGeometry y="30" width="240" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="meter-serial" value="     serial_number: VARCHAR(50) UNIQUE" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="meter">
+          <mxGeometry y="60" width="240" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="meter-status" value="     status: VARCHAR(20)" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="meter">
+          <mxGeometry y="90" width="240" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="meter-zone" value="FK  zone_id: BIGINT" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="meter">
+          <mxGeometry y="120" width="240" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Tariff -->
+        <mxCell id="tariff" value="Tariff" style="swimlane;rounded=0;whiteSpace=wrap;html=1;startSize=30;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="380" y="420" width="260" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="tariff-id" value="PK  id: BIGINT" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="tariff">
+          <mxGeometry y="30" width="260" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tariff-name" value="     name: VARCHAR(100)" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="tariff">
+          <mxGeometry y="60" width="260" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tariff-price" value="     unit_price: NUMERIC(10,4)" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="tariff">
+          <mxGeometry y="90" width="260" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tariff-from" value="     valid_from / valid_to: DATE" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="tariff">
+          <mxGeometry y="120" width="260" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tariff-time" value="     start_time / end_time: TIME" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="tariff">
+          <mxGeometry y="150" width="260" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tariff-active" value="     active: BOOLEAN" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="tariff">
+          <mxGeometry y="180" width="260" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ConsumptionReading -->
+        <mxCell id="reading" value="ConsumptionReading" style="swimlane;rounded=0;whiteSpace=wrap;html=1;startSize=30;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="760" y="220" width="280" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="reading-id" value="PK  id: BIGINT" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="reading">
+          <mxGeometry y="30" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="reading-meter" value="FK  meter_id: BIGINT" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="reading">
+          <mxGeometry y="60" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="reading-tariff" value="FK  tariff_id: BIGINT" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="reading">
+          <mxGeometry y="90" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="reading-time" value="     reading_time: TIMESTAMP" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="reading">
+          <mxGeometry y="120" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="reading-kwh" value="     consumption_kwh: NUMERIC(12,3)" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="reading">
+          <mxGeometry y="150" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="reading-cost" value="     total_cost: NUMERIC(14,2)" style="text;align=left;verticalAlign=middle;spacingLeft=8;html=1;" vertex="1" parent="reading">
+          <mxGeometry y="180" width="280" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Relationships -->
+        <mxCell id="edge-zone-meter" value="1 : N" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERmany;startArrow=ERone;rounded=0;" edge="1" parent="1" source="zone" target="meter">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-meter-reading" value="1 : N" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERmany;startArrow=ERone;rounded=0;" edge="1" parent="1" source="meter" target="reading">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-tariff-reading" value="1 : N" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERmany;startArrow=ERone;rounded=0;" edge="1" parent="1" source="tariff" target="reading">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

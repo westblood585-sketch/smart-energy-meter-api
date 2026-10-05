@@ -1,0 +1,33 @@
+services:
+  app:
+    build: .
+    container_name: energy-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/energydb
+      DB_USER: energy
+      DB_PASSWORD: energy
+    ports:
+      - "8080:8080"
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: energy-postgres
+    environment:
+      POSTGRES_DB: energydb
+      POSTGRES_USER: energy
+      POSTGRES_PASSWORD: energy
+    ports:
+      - "5432:5432"
+    volumes:
+      - energy-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U energy -d energydb"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  energy-pgdata:

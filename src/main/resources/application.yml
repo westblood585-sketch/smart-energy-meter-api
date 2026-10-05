@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: energy-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/energydb}
+    username: ${DB_USER:energy}
+    password: ${DB_PASSWORD:energy}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method

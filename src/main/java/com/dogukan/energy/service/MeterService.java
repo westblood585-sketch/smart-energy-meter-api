@@ -1,0 +1,82 @@
+package com.dogukan.energy.service;
+
+import com.dogukan.energy.dto.request.MeterRequest;
+import com.dogukan.energy.dto.response.MeterResponse;
+import com.dogukan.energy.entity.BuildingZone;
+import com.dogukan.energy.entity.Meter;
+import com.dogukan.energy.exception.DuplicateResourceException;
+import com.dogukan.energy.exception.ResourceNotFoundException;
+import com.dogukan.energy.mapper.MeterMapper;
+import com.dogukan.energy.repository.BuildingZoneRepository;
+import com.dogukan.energy.repository.MeterRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@Transactional(readOnly = true)
+public class MeterService {
+
+    private final MeterRepository meterRepository;
+    private final BuildingZoneRepository zoneRepository;
+    private final MeterMapper meterMapper;
+
+    public MeterService(MeterRepository meterRepository, BuildingZoneRepository zoneRepository, MeterMapper meterMapper) {
+        this.meterRepository = meterRepository;
+        this.zoneRepository = zoneRepository;
+        this.meterMapper = meterMapper;
+    }
+
+    @Transactional
+    public MeterResponse create(MeterRequest request) {
+        if (meterRepository.existsBySerialNumber(request.serialNumber().trim())) {
+            throw new DuplicateResourceException("Meter", "serialNumber", request.serialNumber());
+        }
+        BuildingZone zone = zoneRepository.findById(request.zoneId())
+                .orElseThrow(() -> new ResourceNotFoundException("BuildingZone", request.zoneId()));
+        Meter saved = meterRepository.save(meterMapper.toEntity(request, zone));
+        return meterMapper.toResponse(saved);
+    }
+
+    @Transactional
+    public MeterResponse update(Long id, MeterRequest request) {
+        Meter meter = findEntity(id);
+        if (!meter.getSerialNumber().equalsIgnoreCase(request.serialNumber().trim())
+                && meterRepository.existsBySerialNumber(request.serialNumber().trim())) {
+            throw new DuplicateResourceException("Meter", "serialNumber", request.serialNumber());
+        }
+        if (!meter.getZone().getId().equals(request.zoneId())) {
+            BuildingZone zone = zoneRepository.findById(request.zoneId())
+                    .orElseThrow(() -> new ResourceNotFoundException("BuildingZone", request.zoneId()));
+            meter.setZone(zone);
+        }
+        meterMapper.updateEntity(request, meter);
+        return meterMapper.toResponse(meter);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        meterRepository.delete(findEntity(id));
+    }
+
+    public MeterResponse getById(Long id) {
+        return meterMapper.toResponse(findEntity(id));
+    }
+
+    public Page<MeterResponse> getByZone(Long zoneId, Pageable pageable) {
+        if (!zoneRepository.existsById(zoneId)) {
+            throw new ResourceNotFoundException("BuildingZone", zoneId);
+        }
+        return meterRepository.findByZoneId(zoneId, pageable).map(meterMapper::toResponse);
+    }
+
+    public Page<MeterResponse> getAll(Pageable pageable) {
+        return meterRepository.findAll(pageable).map(meterMapper::toResponse);
+    }
+
+    private Meter findEntity(Long id) {
+        return meterRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Meter", id));
+    }
+}
