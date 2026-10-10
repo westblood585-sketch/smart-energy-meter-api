@@ -1,5 +1,8 @@
 package com.dogukan.energy.controller;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.dogukan.energy.dto.request.TariffRequest;
 import com.dogukan.energy.dto.response.ErrorResponse;
 import com.dogukan.energy.dto.response.TariffResponse;
@@ -29,6 +32,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/tariffs")
 @Tag(name = "Tariffs", description = "Time-based electricity price tariffs")
 public class TariffController {
+    private static final Logger log = LoggerFactory.getLogger(TariffController.class);
+
 
     private final TariffService tariffService;
 
@@ -43,6 +48,7 @@ public class TariffController {
     @ApiResponse(responseCode = "400", description = "Validation failed",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     public TariffResponse create(@Valid @RequestBody TariffRequest request) {
+        log.info("Executing TariffController#create");
         return tariffService.create(request);
     }
 
@@ -52,6 +58,7 @@ public class TariffController {
     @ApiResponse(responseCode = "404", description = "Tariff not found",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     public TariffResponse getById(@PathVariable Long id) {
+        log.info("Executing TariffController#getById");
         return tariffService.getById(id);
     }
 
@@ -67,6 +74,7 @@ public class TariffController {
     @ApiResponse(responseCode = "404", description = "Tariff not found",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     public TariffResponse update(@PathVariable Long id, @Valid @RequestBody TariffRequest request) {
+        log.info("Executing TariffController#update");
         return tariffService.update(id, request);
     }
 
@@ -77,6 +85,7 @@ public class TariffController {
     @ApiResponse(responseCode = "404", description = "Tariff not found",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     public ResponseEntity<Void> delete(@PathVariable Long id) {
+        log.info("Executing TariffController#delete");
         tariffService.delete(id);
         return ResponseEntity.noContent().build();
     }

@@ -184,3 +184,23 @@ Hata durumunda tüm endpoint'ler aşağıdaki standart formatta yanıt döner:
 `docker-compose.yml` içindeki veritabanı kullanıcı adı/şifresi (`energy`/`energy`)
 yalnızca yerel geliştirme amaçlıdır; prod ortamında ortam değişkenleri üzerinden
 (`DB_URL`, `DB_USER`, `DB_PASSWORD`) değiştirilmelidir.
+
+---
+
+## 📊 Logging & Observability Architecture
+
+| Log Level | Target Layer | Trigger Condition | Operational Context |
+| :--- | :--- | :--- | :--- |
+| **INFO** | *Controller | HTTP REST entry points | Route execution, incoming payload parameters |
+| **INFO** | *Service | Core business transactions | State mutations, entity registration, reading ingestion |
+| **DEBUG** | *Service | Internal calculations | Query filtering, date window slicing, baseline threshold comparisons |
+| **WARN** | *Service / ExceptionHandler | Business rule rejections (HTTP 4xx) | Anomalous reading surges, duplicate records, inactive meter |
+| **ERROR** | GlobalExceptionHandler | Unhandled exceptions (HTTP 500) | Infrastructure drops, unexpected errors |
+
+### GDPR / KVKK Compliance
+Log messages contain zero PII. Only operational identifiers (`meterId`, `serialNumber`, `zoneId`, `readingValue`, `timestamp`) are recorded.
+
+### Dynamic Log Level
+```bash
+LOG_LEVEL=DEBUG ./mvnw spring-boot:run
+```

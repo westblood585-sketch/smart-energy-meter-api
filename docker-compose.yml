@@ -6,6 +6,7 @@ services:
       postgres:
         condition: service_healthy
     environment:
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
       DB_URL: jdbc:postgresql://postgres:5432/energydb
       DB_USER: energy
       DB_PASSWORD: energy
@@ -16,6 +17,7 @@ services:
     image: postgres:16-alpine
     container_name: energy-postgres
     environment:
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
       POSTGRES_DB: energydb
       POSTGRES_USER: energy
       POSTGRES_PASSWORD: energy

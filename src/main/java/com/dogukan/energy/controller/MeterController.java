@@ -1,5 +1,8 @@
 package com.dogukan.energy.controller;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.dogukan.energy.dto.request.MeterRequest;
 import com.dogukan.energy.dto.response.ErrorResponse;
 import com.dogukan.energy.dto.response.MeterResponse;
@@ -31,6 +34,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/meters")
 @Tag(name = "Meters", description = "Smart energy meters installed in building zones")
 public class MeterController {
+    private static final Logger log = LoggerFactory.getLogger(MeterController.class);
+
 
     private final MeterService meterService;
 
@@ -49,6 +54,7 @@ public class MeterController {
     @ApiResponse(responseCode = "409", description = "A meter with the same serial number already exists",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     public MeterResponse create(@Valid @RequestBody MeterRequest request) {
+        log.info("Executing MeterController#create");
         return meterService.create(request);
     }
 
@@ -58,6 +64,7 @@ public class MeterController {
     @ApiResponse(responseCode = "404", description = "Meter not found",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     public MeterResponse getById(@PathVariable Long id) {
+        log.info("Executing MeterController#getById");
         return meterService.getById(id);
     }
 
@@ -80,6 +87,7 @@ public class MeterController {
     @ApiResponse(responseCode = "409", description = "A meter with the same serial number already exists",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     public MeterResponse update(@PathVariable Long id, @Valid @RequestBody MeterRequest request) {
+        log.info("Executing MeterController#update");
         return meterService.update(id, request);
     }
 
@@ -90,6 +98,7 @@ public class MeterController {
     @ApiResponse(responseCode = "404", description = "Meter not found",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     public ResponseEntity<Void> delete(@PathVariable Long id) {
+        log.info("Executing MeterController#delete");
         meterService.delete(id);
         return ResponseEntity.noContent().build();
     }

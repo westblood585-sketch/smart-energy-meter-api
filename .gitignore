@@ -17,3 +17,16 @@ Thumbs.db
 # Environment / secrets (if you ever add one)
 .env
 application-local.yml
+# Sensitive & Secret Files
+*.env
+*.env.*
+*.pem
+*.key
+credentials.json
+secrets.yml
+
+# IDE & OS specific
+.DS_Store
+.idea/
+*.iml
+.vscode/
