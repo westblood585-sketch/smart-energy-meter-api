@@ -1,5 +1,8 @@
 package com.dogukan.energy.service;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.dogukan.energy.dto.request.ConsumptionReadingRequest;
 import com.dogukan.energy.dto.response.ConsumptionReadingResponse;
 import com.dogukan.energy.dto.response.ConsumptionReportResponse;
@@ -32,6 +35,8 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 public class ConsumptionReadingService {
+    private static final Logger log = LoggerFactory.getLogger(ConsumptionReadingService.class);
+
 
     private final ConsumptionReadingRepository readingRepository;
     private final MeterRepository meterRepository;
@@ -56,6 +61,7 @@ public class ConsumptionReadingService {
 
     @Transactional
     public ConsumptionReadingResponse submit(ConsumptionReadingRequest request) {
+        log.info("Executing ConsumptionReadingService#submit");
         Meter meter = meterRepository.findById(request.meterId())
                 .orElseThrow(() -> new ResourceNotFoundException("Meter", request.meterId()));
 
@@ -99,6 +105,7 @@ public class ConsumptionReadingService {
     }
 
     public Page<ConsumptionReadingResponse> getByMeter(Long meterId, LocalDateTime from, LocalDateTime to, Pageable pageable) {
+        log.info("Executing ConsumptionReadingService#getByMeter");
         if (!meterRepository.existsById(meterId)) {
             throw new ResourceNotFoundException("Meter", meterId);
         }
@@ -107,6 +114,7 @@ public class ConsumptionReadingService {
     }
 
     public ConsumptionReportResponse getMeterReport(Long meterId, LocalDateTime from, LocalDateTime to) {
+        log.info("Executing ConsumptionReadingService#getMeterReport");
         Meter meter = meterRepository.findById(meterId)
                 .orElseThrow(() -> new ResourceNotFoundException("Meter", meterId));
         ConsumptionSummary summary = readingRepository.summarizeByMeter(meterId, from, to);
@@ -114,6 +122,7 @@ public class ConsumptionReadingService {
     }
 
     public ConsumptionReportResponse getZoneReport(Long zoneId, LocalDateTime from, LocalDateTime to) {
+        log.info("Executing ConsumptionReadingService#getZoneReport");
         BuildingZone zone = zoneRepository.findById(zoneId)
                 .orElseThrow(() -> new ResourceNotFoundException("BuildingZone", zoneId));
         ConsumptionSummary summary = readingRepository.summarizeByZone(zoneId, from, to);

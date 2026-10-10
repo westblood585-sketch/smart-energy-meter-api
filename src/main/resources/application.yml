@@ -1,21 +1,25 @@
 spring:
   application:
-    name: energy-service
+    name: smart-energy-meter-api
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/energydb}
-    username: ${DB_USER:energy}
-    password: ${DB_PASSWORD:energy}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:energy_db}
+    username: ${DB_USER:energy_user}
+    password: ${DB_PASSWORD:energy_secret}
+    driver-class-name: org.postgresql.Driver
   jpa:
-    open-in-view: false
     hibernate:
       ddl-auto: update
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
-springdoc:
-  api-docs:
-    path: /v3/api-docs
-  swagger-ui:
-    path: /swagger-ui.html
-    operations-sorter: method
+logging:
+  level:
+    root: INFO
+    com.dogukan.energy: ${LOG_LEVEL:INFO}
+    org.springframework.web: INFO
+    org.hibernate.SQL: ${SQL_LOG_LEVEL:WARN}
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"

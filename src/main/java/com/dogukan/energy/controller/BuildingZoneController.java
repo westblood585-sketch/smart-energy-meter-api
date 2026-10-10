@@ -1,5 +1,8 @@
 package com.dogukan.energy.controller;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.dogukan.energy.dto.request.BuildingZoneRequest;
 import com.dogukan.energy.dto.response.BuildingZoneResponse;
 import com.dogukan.energy.dto.response.ErrorResponse;
@@ -30,6 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/zones")
 @Tag(name = "Building Zones", description = "Facility zones that group smart meters")
 public class BuildingZoneController {
+    private static final Logger log = LoggerFactory.getLogger(BuildingZoneController.class);
+
 
     private final BuildingZoneService zoneService;
 
@@ -46,6 +51,7 @@ public class BuildingZoneController {
     @ApiResponse(responseCode = "409", description = "A zone with the same name already exists",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     public BuildingZoneResponse create(@Valid @RequestBody BuildingZoneRequest request) {
+        log.info("Executing BuildingZoneController#create");
         return zoneService.create(request);
     }
 
@@ -55,6 +61,7 @@ public class BuildingZoneController {
     @ApiResponse(responseCode = "404", description = "Zone not found",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     public BuildingZoneResponse getById(@PathVariable Long id) {
+        log.info("Executing BuildingZoneController#getById");
         return zoneService.getById(id);
     }
 
@@ -72,6 +79,7 @@ public class BuildingZoneController {
     @ApiResponse(responseCode = "409", description = "A zone with the same name already exists",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     public BuildingZoneResponse update(@PathVariable Long id, @Valid @RequestBody BuildingZoneRequest request) {
+        log.info("Executing BuildingZoneController#update");
         return zoneService.update(id, request);
     }
 

@@ -1,5 +1,8 @@
 package com.dogukan.energy.controller;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.dogukan.energy.dto.request.ConsumptionReadingRequest;
 import com.dogukan.energy.dto.response.ConsumptionReadingResponse;
 import com.dogukan.energy.dto.response.ConsumptionReportResponse;
@@ -32,6 +35,8 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/v1/readings")
 @Tag(name = "Consumption Readings", description = "Hourly meter readings and consumption reports")
 public class ConsumptionReadingController {
+    private static final Logger log = LoggerFactory.getLogger(ConsumptionReadingController.class);
+
 
     private final ConsumptionReadingService readingService;
 
@@ -53,6 +58,7 @@ public class ConsumptionReadingController {
             "Meter is inactive/faulty, the reading is an anomalous spike, or no tariff applies",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     public ConsumptionReadingResponse submit(@Valid @RequestBody ConsumptionReadingRequest request) {
+        log.info("Executing ConsumptionReadingController#submit");
         return readingService.submit(request);
     }
 
